@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistem Manajemen Kayu Merbau – Sertifikasi FSC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest-dark: #1a2e1c;
+    --forest-mid: #2d5a30;
+    --forest-light: #4a8c4f;
+    --forest-pale: #7bbf81;
+    --bark-dark: #3d2b1f;
+    --bark-mid: #6b4c35;
+    --bark-light: #a07850;
+    --cream: #f5f0e8;
+    --cream-dark: #ede4d3;
+    --gold: #c8960a;
+    --gold-light: #e8b420;
+    --white: #ffffff;
+    --text-main: #1a2e1c;
+    --text-muted: #5a6b5c;
+    --text-light: #8a9e8c;
+    --border: #d4e2d5;
+    --shadow: rgba(26,46,28,0.10);
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--text-main);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--forest-dark);
+    color: var(--white);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 64px;
+  }
+  .logo-mark {
+    width: 40px;
+    height: 40px;
+    background: var(--gold);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--forest-dark);
+    flex-shrink: 0;
+    letter-spacing: -0.5px;
+  }
+  .header-title {
+    flex: 1;
+  }
+  .header-title h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .header-title p {
+    font-size: 11px;
+    color: var(--forest-pale);
+    margin-top: 1px;
+    font-style: italic;
+  }
+  .fsc-badge {
+    background: var(--gold);
+    color: var(--forest-dark);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  /* NAV */
+  .nav {
+    background: var(--forest-mid);
+    border-bottom: 1px solid var(--forest-light);
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+  }
+  .nav-btn {
+    padding: 12px 18px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.75);
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .nav-btn:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .nav-btn.active {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold-light);
+    background: rgba(200,150,10,0.12);
+  }
+
+  /* LAYOUT */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* PAGE HEADER */
+  .page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .page-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--forest-dark);
+  }
+  .page-header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .stat-card.green::before { background: var(--forest-light); }
+  .stat-card.gold::before { background: var(--gold); }
+  .stat-card.bark::before { background: var(--bark-light); }
+  .stat-card.blue::before { background: #3a7bd5; }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--forest-dark);
+    line-height: 1;
+  }
+  .stat-sub {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .card-header {
+    padding: 1rem 1.5rem;
+    background: var(--cream-dark);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-header h3 {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--forest-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-body { padding: 1.5rem; }
+
+  /* FORM */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  input, select, textarea {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-main);
+    background: var(--white);
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--forest-light);
+    box-shadow: 0 0 0 3px rgba(74,140,79,0.12);
+  }
+  textarea { resize: vertical; min-height: 70px; }
+
+  /* BUTTONS */
+  .btn {
+    padding: 9px 20px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--forest-mid);
+    color: var(--white);
+  }
+  .btn-primary:hover { background: var(--forest-dark); }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--forest-dark);
+  }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .btn-outline:hover { border-color: var(--forest-light); color: var(--forest-mid); }
+  .btn-danger {
+    background: #dc3545;
+    color: white;
+  }
+  .btn-danger:hover { background: #b02a37; }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--cream-dark);
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--cream-dark);
+    color: var(--text-main);
+    vertical-align: middle;
+  }
+  tbody tr:hover { background: var(--cream); }
+  tbody tr:last-child td { border-bottom: none; }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .badge-green { background: #d4edda; color: #1a6b2e; }
+  .badge-gold { background: #fff3cd; color: #856404; }
+  .badge-red { background: #f8d7da; color: #842029; }
+  .badge-blue { background: #cfe2ff; color: #0a367a; }
+  .badge-gray { background: var(--cream-dark); color: var(--text-muted); }
+  .badge-bark { background: #f0e0d0; color: var(--bark-dark); }
+
+  /* PROGRESS */
+  .progress-bar {
+    height: 8px;
+    background: var(--cream-dark);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--forest-light);
+    transition: width 0.3s;
+  }
+  .progress-fill.gold { background: var(--gold); }
+  .progress-fill.bark { background: var(--bark-light); }
+  .progress-fill.red { background: #dc3545; }
+
+  /* CHECKLIST */
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--cream-dark);
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .check-box.checked {
+    background: var(--forest-light);
+    border-color: var(--forest-light);
+    color: white;
+  }
+  .check-title { font-size: 14px; font-weight: 600; color: var(--text-main); }
+  .check-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .check-category {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--cream-dark);
+    color: var(--text-muted);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* REPORT */
+  .report-section {
+    background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-mid) 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .report-section::after {
+    content: 'FSC';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 140px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.04);
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+  }
+  .report-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .report-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 12px;
+  }
+  .report-meta span::before { content: '• '; }
+
+  /* ALERT */
+  .alert {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .alert-warning { background: #fff8e1; border-color: var(--gold); color: #5a4000; }
+  .alert-success { background: #e8f5e9; border-color: var(--forest-light); color: #1b5e20; }
+  .alert-info { background: #e3f2fd; border-color: #1976d2; color: #0d47a1; }
+  .alert-icon { font-size: 18px; line-height: 1; margin-top: 1px; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    position: relative;
+    padding-bottom: 1.5rem;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--forest-light);
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: var(--forest-light);
+  }
+  .timeline-dot.done {
+    background: var(--forest-light);
+    color: white;
+  }
+  .timeline-date { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+  .timeline-title { font-size: 14px; font-weight: 600; margin: 2px 0; }
+  .timeline-desc { font-size: 12px; color: var(--text-muted); }
+
+  /* MODAL OVERLAY */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    width: 560px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .modal-header {
+    padding: 1.2rem 1.5rem;
+    background: var(--cream-dark);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-header h3 { font-weight: 700; font-size: 16px; }
+  .modal-body { padding: 1.5rem; }
+  .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .btn-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  /* MISC */
+  .flex { display: flex; }
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .mt-1 { margin-top: 1rem; }
+  .species-tag {
+    font-size: 11px;
+    font-style: italic;
+    background: var(--cream-dark);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--bark-mid);
+  }
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-light);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 1rem; }
+  .empty-state p { font-size: 14px; }
+
+  .two-col { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  @media (max-width: 768px) {
+    .two-col { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-grid.three { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-mark">FSC</div>
+    <div class="header-title">
+      <h1>Sistem Manajemen Kayu Merbau</h1>
+      <p>Instia bijuga — Pengelolaan Hutan Berkelanjutan</p>
+    </div>
+    <span class="fsc-badge">FSC® Certified</span>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showSection('dashboard')">📊 Dasbor</button>
+    <button class="nav-btn" onclick="showSection('pohon')">🌳 Data Pohon</button>
+    <button class="nav-btn" onclick="showSection('panen')">🪵 Panen & Produksi</button>
+    <button class="nav-btn" onclick="showSection('rantai')">🔗 Rantai Pasok</button>
+    <button class="nav-btn" onclick="showSection('fsc')">✅ Persyaratan FSC</button>
+    <button class="nav-btn" onclick="showSection('laporan')">📄 Laporan</button>
+  </div>
+</nav>
+
+<main class="main">
+
+  <!-- ====== DASBOR ====== -->
+  <section id="dashboard" class="section active">
+    <div class="page-header">
+      <div>
+        <h2>Dasbor Operasional</h2>
+        <p>Ringkasan pengelolaan hutan merbau & kemajuan sertifikasi FSC</p>
+      </div>
+      <div class="flex gap-8">
+        <span id="tanggal-header" style="font-size:13px;color:var(--text-muted);align-self:center;"></span>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card green">
+        <div class="stat-label">Total Pohon Tercatat</div>
+        <div class="stat-value" id="stat-total-pohon">0</div>
+        <div class="stat-sub">dalam inventaris aktif</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-label">Volume Produksi</div>
+        <div class="stat-value" id="stat-volume">0 m³</div>
+        <div class="stat-sub">periode berjalan</div>
+      </div>
+      <div class="stat-card bark">
+        <div class="stat-label">Catatan Panen</div>
+        <div class="stat-value" id="stat-panen">0</div>
+        <div class="stat-sub">total transaksi</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">Kemajuan FSC</div>
+        <div class="stat-value" id="stat-fsc-pct">0%</div>
+        <div class="stat-sub" id="stat-fsc-sub">0 dari 20 kriteria</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h3>🌿 Kemajuan Sertifikasi FSC</h3>
+          </div>
+          <div class="card-body">
+            <div id="fsc-progress-list"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>⚠️ Peringatan & Tindakan</h3>
+          </div>
+          <div class="card-body" id="alert-area">
+            <div class="alert alert-info">
+              <span class="alert-icon">ℹ️</span>
+              <div>Sistem siap digunakan. Mulai dengan menambahkan data pohon di menu <strong>Data Pohon</strong>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h3>📅 Aktivitas Terakhir</h3>
+          </div>
+          <div class="card-body">
+            <div id="timeline-log" class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot">●</div>
+                <div class="timeline-date">Hari ini</div>
+                <div class="timeline-title">Sistem diinisialisasi</div>
+                <div class="timeline-desc">Manajemen FSC Merbau aktif</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>🗂️ Info Spesies</h3>
+          </div>
+          <div class="card-body">
+            <table style="width:100%;font-size:13px;border-collapse:collapse;">
+              <tr><td style="padding:6px 0;color:var(--text-muted);font-weight:600;font-size:11px;text-transform:uppercase;">Nama Lokal</td><td style="padding:6px 0;">Merbau, Kayu Besi Papua</td></tr>
+              <tr style="border-top:1px solid var(--cream-dark)"><td style="padding:6px 0;color:var(--text-muted);font-weight:600;font-size:11px;text-transform:uppercase;">Nama Ilmiah</td><td style="padding:6px 0;font-style:italic;">Instia bijuga (Colebr.) Kuntze</td></tr>
+              <tr style="border-top:1px solid var(--cream-dark)"><td style="padding:6px 0;color:var(--text-muted);font-weight:600;font-size:11px;text-transform:uppercase;">Famili</td><td style="padding:6px 0;">Fabaceae / Leguminosae</td></tr>
+              <tr style="border-top:1px solid var(--cream-dark)"><td style="padding:6px 0;color:var(--text-muted);font-weight:600;font-size:11px;text-transform:uppercase;">Status IUCN</td><td><span class="badge badge-gold">Vulnerable (VU)</span></td></tr>
+              <tr style="border-top:1px solid var(--cream-dark)"><td style="padding:6px 0;color:var(--text-muted);font-weight:600;font-size:11px;text-transform:uppercase;">Siklus Tebang</td><td style="padding:6px 0;">40–60 tahun</td></tr>
+              <tr style="border-top:1px solid var(--cream-dark)"><td style="padding:6px 0;color:var(--text-muted);font-weight:600;font-size:11px;text-transform:uppercase;">DBH Minimum</td><td style="padding:6px 0;">50 cm (FSC)</td></tr>
+              <tr style="border-top:1px solid var(--cream-dark)"><td style="padding:6px 0;color:var(--text-muted);font-weight:600;font-size:11px;text-transform:uppercase;">Persebaran</td><td style="padding:6px 0;">Papua, Maluku, Indo-Pasifik</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== DATA POHON ====== -->
+  <section id="pohon" class="section">
+    <div class="page-header">
+      <div>
+        <h2>Inventaris Pohon</h2>
+        <p>Pencatatan dan pemantauan pohon merbau di area kelola</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-pohon')">+ Tambah Pohon</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>🌳 Daftar Pohon Tercatat</h3>
+        <div class="flex gap-8">
+          <input type="text" placeholder="Cari ID / blok..." id="search-pohon" oninput="filterPohon()" style="width:200px;font-size:13px;padding:6px 10px;">
+          <select id="filter-status-pohon" onchange="filterPohon()" style="font-size:13px;padding:6px 10px;">
+            <option value="">Semua Status</option>
+            <option value="layak">Layak Tebang</option>
+            <option value="perlindungan">Perlindungan</option>
+            <option value="pemantauan">Pemantauan</option>
+            <option value="ditebang">Ditebang</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID Pohon</th>
+              <th>Blok/Petak</th>
+              <th>DBH (cm)</th>
+              <th>Tinggi (m)</th>
+              <th>Volume (m³)</th>
+              <th>Koordinat</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabel-pohon">
+            <tr><td colspan="8"><div class="empty-state"><div class="icon">🌿</div><p>Belum ada data pohon. Klik "+ Tambah Pohon" untuk mulai.</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PANEN ====== -->
+  <section id="panen" class="section">
+    <div class="page-header">
+      <div>
+        <h2>Panen & Produksi</h2>
+        <p>Pencatatan kegiatan penebangan dan produksi kayu merbau bersertifikat</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-panen')">+ Catat Panen</button>
+    </div>
+
+    <div class="alert alert-warning">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Standar FSC:</strong> Penebangan hanya diizinkan untuk pohon dengan DBH ≥ 50 cm dan status "Layak Tebang" sesuai hasil inventarisasi. Pastikan setiap penebangan memiliki izin yang valid.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>🪵 Riwayat Panen</h3>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>No. Seri</th>
+              <th>Tanggal</th>
+              <th>ID Pohon</th>
+              <th>Blok</th>
+              <th>Volume (m³)</th>
+              <th>Operator</th>
+              <th>Izin</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tabel-panen">
+            <tr><td colspan="9"><div class="empty-state"><div class="icon">🪵</div><p>Belum ada catatan panen.</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== RANTAI PASOK ====== -->
+  <section id="rantai" class="section">
+    <div class="page-header">
+      <div>
+        <h2>Rantai Pasok (Chain of Custody)</h2>
+        <p>Pelacakan pergerakan kayu dari hutan ke konsumen akhir</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-rantai')">+ Tambah Dokumen</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>🔗 Dokumen CoC</h3>
+        <span class="badge badge-blue">FSC CoC Required</span>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info">
+          <span>ℹ️</span>
+          <div>FSC Chain of Custody (CoC) mensyaratkan pelacakan kayu bersertifikat dari titik pemanenan hingga produk akhir. Setiap perpindahan harus terdokumentasi.</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No. Dokumen</th>
+                <th>Tanggal</th>
+                <th>Asal</th>
+                <th>Tujuan</th>
+                <th>Volume (m³)</th>
+                <th>Referensi Panen</th>
+                <th>Status Verifikasi</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tabel-rantai">
+              <tr><td colspan="8"><div class="empty-state"><div class="icon">🔗</div><p>Belum ada dokumen rantai pasok.</p></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 Diagram Alur Rantai Pasok</h3>
+      </div>
+      <div class="card-body" style="overflow-x:auto;">
+        <div style="display:flex;align-items:center;gap:0;min-width:600px;padding:1rem 0;">
+          <div style="text-align:center;flex:1;">
+            <div style="background:var(--forest-mid);color:white;border-radius:10px;padding:14px 10px;font-size:12px;font-weight:600;">🌳<br>Hutan Kelola<br><span style="font-size:10px;font-weight:400;opacity:0.8;">Inventarisasi & Panen</span></div>
+          </div>
+          <div style="color:var(--forest-light);font-size:20px;padding:0 4px;">→</div>
+          <div style="text-align:center;flex:1;">
+            <div style="background:var(--bark-mid);color:white;border-radius:10px;padding:14px 10px;font-size:12px;font-weight:600;">🏭<br>Pengolahan Awal<br><span style="font-size:10px;font-weight:400;opacity:0.8;">Penggergajian / Sortasi</span></div>
+          </div>
+          <div style="color:var(--forest-light);font-size:20px;padding:0 4px;">→</div>
+          <div style="text-align:center;flex:1;">
+            <div style="background:#3a7bd5;color:white;border-radius:10px;padding:14px 10px;font-size:12px;font-weight:600;">📦<br>Penyimpanan<br><span style="font-size:10px;font-weight:400;opacity:0.8;">Gudang Tersertifikasi</span></div>
+          </div>
+          <div style="color:var(--forest-light);font-size:20px;padding:0 4px;">→</div>
+          <div style="text-align:center;flex:1;">
+            <div style="background:var(--gold);color:var(--forest-dark);border-radius:10px;padding:14px 10px;font-size:12px;font-weight:600;">🚢<br>Distribusi<br><span style="font-size:10px;font-weight:400;opacity:0.8;">Ekspor / Lokal</span></div>
+          </div>
+          <div style="color:var(--forest-light);font-size:20px;padding:0 4px;">→</div>
+          <div style="text-align:center;flex:1;">
+            <div style="background:var(--forest-dark);color:white;border-radius:10px;padding:14px 10px;font-size:12px;font-weight:600;">🏠<br>Konsumen Akhir<br><span style="font-size:10px;font-weight:400;opacity:0.8;">Dengan Label FSC</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FSC CHECKLIST ====== -->
+  <section id="fsc" class="section">
+    <div class="page-header">
+      <div>
+        <h2>Persyaratan Sertifikasi FSC</h2>
+        <p>Daftar periksa 10 Prinsip FSC untuk pengelolaan hutan merbau berkelanjutan</p>
+      </div>
+      <button class="btn btn-gold" onclick="resetChecklist()">↺ Reset</button>
+    </div>
+
+    <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div class="stat-card green">
+        <div class="stat-label">Terpenuhi</div>
+        <div class="stat-value" id="chk-selesai">0</div>
+        <div class="stat-sub">kriteria FSC</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-label">Dalam Proses</div>
+        <div class="stat-value" id="chk-proses">0</div>
+        <div class="stat-sub">belum terceklis</div>
+      </div>
+      <div class="stat-card bark">
+        <div class="stat-label">Kemajuan</div>
+        <div class="stat-value" id="chk-pct">0%</div>
+        <div class="stat-sub">dari total kriteria</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>✅ Daftar Periksa Prinsip FSC</h3>
+      </div>
+      <div class="card-body" id="fsc-checklist-container"></div>
+    </div>
+  </section>
+
+  <!-- ====== LAPORAN ====== -->
+  <section id="laporan" class="section">
+    <div class="page-header">
+      <div>
+        <h2>Laporan & Dokumentasi</h2>
+        <p>Ringkasan operasional untuk keperluan audit dan sertifikasi FSC</p>
+      </div>
+      <button class="btn btn-gold" onclick="window.print()">🖨️ Cetak Laporan</button>
+    </div>
+
+    <div class="report-section">
+      <h3>Laporan Pengelolaan Hutan Merbau</h3>
+      <p style="opacity:0.75;font-size:14px;font-style:italic;">Instia bijuga – Pengelolaan Hutan Produksi Lestari</p>
+      <div class="report-meta">
+        <span id="laporan-tanggal">—</span>
+        <span>FSC Forest Management Standard</span>
+        <span>Versi Dokumen: 1.0</span>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <div class="card-header"><h3>📈 Ringkasan Produksi</h3></div>
+          <div class="card-body" id="laporan-produksi">
+            <p style="color:var(--text-muted);font-size:14px;">Belum ada data produksi. Tambahkan catatan panen terlebih dahulu.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>🌳 Ringkasan Inventaris</h3></div>
+          <div class="card-body" id="laporan-inventaris">
+            <p style="color:var(--text-muted);font-size:14px;">Belum ada data inventaris.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header"><h3>✅ Status Sertifikasi FSC</h3></div>
+          <div class="card-body" id="laporan-fsc">
+            <div id="fsc-bar-laporan"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>📋 Catatan Audit</h3></div>
+          <div class="card-body">
+            <textarea id="catatan-audit" placeholder="Tambahkan catatan untuk auditor FSC..." style="width:100%;min-height:120px;"></textarea>
+            <button class="btn btn-outline btn-sm mt-1" onclick="simpanCatatan()">💾 Simpan Catatan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- MODAL: TAMBAH POHON -->
+<div class="modal-overlay" id="modal-pohon">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🌳 Tambah Data Pohon</h3>
+      <button class="btn-close" onclick="closeModal('modal-pohon')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>ID Pohon *</label>
+          <input type="text" id="p-id" placeholder="MB-2024-001">
+        </div>
+        <div class="form-group">
+          <label>Blok / Petak *</label>
+          <input type="text" id="p-blok" placeholder="Blok A-1">
+        </div>
+        <div class="form-group">
+          <label>DBH (cm) *</label>
+          <input type="number" id="p-dbh" placeholder="50" min="10" step="0.1">
+        </div>
+        <div class="form-group">
+          <label>Tinggi Total (m)</label>
+          <input type="number" id="p-tinggi" placeholder="25" min="1" step="0.5">
+        </div>
+        <div class="form-group">
+          <label>Koordinat Lintang</label>
+          <input type="text" id="p-lat" placeholder="-4.1234">
+        </div>
+        <div class="form-group">
+          <label>Koordinat Bujur</label>
+          <input type="text" id="p-lon" placeholder="136.5678">
+        </div>
+        <div class="form-group">
+          <label>Status *</label>
+          <select id="p-status">
+            <option value="pemantauan">Pemantauan</option>
+            <option value="layak">Layak Tebang (DBH ≥ 50 cm)</option>
+            <option value="perlindungan">Perlindungan / HCV</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tanggal Inventarisasi</label>
+          <input type="date" id="p-tanggal">
+        </div>
+        <div class="form-group full">
+          <label>Catatan</label>
+          <textarea id="p-catatan" placeholder="Kondisi pohon, karakteristik khusus, dll..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-pohon')">Batal</button>
+      <button class="btn btn-primary" onclick="simpanPohon()">💾 Simpan Pohon</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CATAT PANEN -->
+<div class="modal-overlay" id="modal-panen">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🪵 Catat Kegiatan Panen</h3>
+      <button class="btn-close" onclick="closeModal('modal-panen')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>No. Seri Penebangan *</label>
+          <input type="text" id="pn-seri" placeholder="TBG-2024-001">
+        </div>
+        <div class="form-group">
+          <label>Tanggal Penebangan *</label>
+          <input type="date" id="pn-tanggal">
+        </div>
+        <div class="form-group">
+          <label>ID Pohon (referensi) *</label>
+          <input type="text" id="pn-pohon" placeholder="MB-2024-001">
+        </div>
+        <div class="form-group">
+          <label>Blok / Petak</label>
+          <input type="text" id="pn-blok" placeholder="Blok A-1">
+        </div>
+        <div class="form-group">
+          <label>Volume Kayu (m³) *</label>
+          <input type="number" id="pn-volume" placeholder="4.5" min="0.1" step="0.1">
+        </div>
+        <div class="form-group">
+          <label>Operator / Tim</label>
+          <input type="text" id="pn-operator" placeholder="Tim Panen A">
+        </div>
+        <div class="form-group">
+          <label>Nomor Izin Tebang</label>
+          <input type="text" id="pn-izin" placeholder="ITH-2024-XXX">
+        </div>
+        <div class="form-group">
+          <label>Teknik Penebangan</label>
+          <select id="pn-teknik">
+            <option>RIL (Reduced Impact Logging)</option>
+            <option>Konvensional Terpantau</option>
+            <option>Tebang Pilih Indonesia (TPI)</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Catatan Lapangan</label>
+          <textarea id="pn-catatan" placeholder="Kondisi lahan, cuaca, kendala, dll..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-panen')">Batal</button>
+      <button class="btn btn-primary" onclick="simpanPanen()">💾 Simpan Catatan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RANTAI PASOK -->
+<div class="modal-overlay" id="modal-rantai">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🔗 Tambah Dokumen Chain of Custody</h3>
+      <button class="btn-close" onclick="closeModal('modal-rantai')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>No. Dokumen *</label>
+          <input type="text" id="r-no" placeholder="CoC-2024-001">
+        </div>
+        <div class="form-group">
+          <label>Tanggal *</label>
+          <input type="date" id="r-tanggal">
+        </div>
+        <div class="form-group">
+          <label>Asal / Pengirim *</label>
+          <input type="text" id="r-asal" placeholder="Hutan Kelola Blok A">
+        </div>
+        <div class="form-group">
+          <label>Tujuan / Penerima *</label>
+          <input type="text" id="r-tujuan" placeholder="Pabrik Pengolahan X">
+        </div>
+        <div class="form-group">
+          <label>Volume (m³) *</label>
+          <input type="number" id="r-volume" placeholder="10.5" step="0.1">
+        </div>
+        <div class="form-group">
+          <label>Referensi No. Panen</label>
+          <input type="text" id="r-panen" placeholder="TBG-2024-001">
+        </div>
+        <div class="form-group full">
+          <label>Keterangan</label>
+          <textarea id="r-ket" placeholder="Jenis produk, tujuan ekspor, dll..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-rantai')">Batal</button>
+      <button class="btn btn-primary" onclick="simpanRantai()">💾 Simpan Dokumen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== STATE ==========
+let pohonData = [];
+let panenData = [];
+let rantaiData = [];
+
+const fscKriteria = [
+  { id: 'P1A', prinsip: 'Prinsip 1: Kepatuhan Hukum', judul: 'Izin pengelolaan hutan diperoleh secara sah', ket: 'Dokumen IUPHHK-HA / SK Menteri LHK tersedia dan valid' },
+  { id: 'P1B', prinsip: 'Prinsip 1: Kepatuhan Hukum', judul: 'Pembayaran royalti & retribusi sesuai ketentuan', ket: 'Bukti pembayaran PNBP, DR, dan PSDH terlampir' },
+  { id: 'P2A', prinsip: 'Prinsip 2: Hak Pekerja', judul: 'Upah minimum dan kondisi kerja layak', ket: 'Kontrak kerja, slip gaji, dan bukti BPJS tersedia' },
+  { id: 'P2B', prinsip: 'Prinsip 2: Hak Pekerja', judul: 'APD dan pelatihan K3 untuk semua pekerja', ket: 'Sertifikat pelatihan dan daftar APD terdistribusi' },
+  { id: 'P3A', prinsip: 'Prinsip 3: Hak Masyarakat Adat', judul: 'Pemetaan wilayah adat dan konsultasi FPIC', ket: 'Peta wilayah adat, notulensi konsultasi, persetujuan Free Prior Informed Consent' },
+  { id: 'P3B', prinsip: 'Prinsip 3: Hak Masyarakat Adat', judul: 'Mekanisme penyelesaian konflik tersedia', ket: 'SOP penanganan keluhan dan rekam jejak penyelesaian' },
+  { id: 'P4A', prinsip: 'Prinsip 4: Hubungan Masyarakat', judul: 'Program pemberdayaan masyarakat lokal', ket: 'Laporan program CSR, pelatihan keterampilan, atau bantuan infrastruktur' },
+  { id: 'P5A', prinsip: 'Prinsip 5: Manfaat Hutan', judul: 'Rencana Kerja Usaha (RKU) dan RKT disusun', ket: 'Dokumen RKU 10 tahun dan RKT tahunan yang disetujui Kementerian LHK' },
+  { id: 'P5B', prinsip: 'Prinsip 5: Manfaat Hutan', judul: 'Sistem inventarisasi tegakan merbau periodik', ket: 'Data inventarisasi terkini, LHTI, dan peta sebaran pohon' },
+  { id: 'P6A', prinsip: 'Prinsip 6: Dampak Lingkungan', judul: 'AMDAL / UKL-UPL tersedia dan diimplementasikan', ket: 'Dokumen AMDAL, laporan RKL-RPL semesteran' },
+  { id: 'P6B', prinsip: 'Prinsip 6: Dampak Lingkungan', judul: 'Penerapan RIL (Reduced Impact Logging)', ket: 'SOP penebangan berdampak rendah, pelatihan operator' },
+  { id: 'P6C', prinsip: 'Prinsip 6: Dampak Lingkungan', judul: 'Perlindungan kawasan lindung dan riparian', ket: 'Peta kawasan lindung, buffer zone ≥50m dari sungai' },
+  { id: 'P7A', prinsip: 'Prinsip 7: Rencana Pengelolaan', judul: 'Dokumen Rencana Pengelolaan Hutan (RPH) tersedia', ket: 'RPH 10 tahun mencakup aspek ekologi, sosial, dan ekonomi' },
+  { id: 'P7B', prinsip: 'Prinsip 7: Rencana Pengelolaan', judul: 'Sistem monitoring dan evaluasi berkala', ket: 'Laporan monitoring tahunan, indikator kinerja, dan tindak lanjut' },
+  { id: 'P8A', prinsip: 'Prinsip 8: Pemantauan & Penilaian', judul: 'Pemantauan biodiversitas dan HCV (High Conservation Value)', ket: 'Survey HCV, daftar spesies dilindungi, peta HCV area' },
+  { id: 'P8B', prinsip: 'Prinsip 8: Pemantauan & Penilaian', judul: 'Pemantauan laju pemanenan dan regenerasi', ket: 'Data Allowable Annual Cut (AAC), permudaan alam, dan penanaman kembali' },
+  { id: 'P9A', prinsip: 'Prinsip 9: HCV', judul: 'Identifikasi dan perlindungan kawasan HCV', ket: 'Penilaian HCV oleh konsultan terakreditasi, peta HCV, rencana pengelolaan' },
+  { id: 'P9B', prinsip: 'Prinsip 9: HCV', judul: 'Larangan konversi hutan alam di HCV area', ket: 'Bukti tidak ada konversi 5 tahun terakhir, komitmen tertulis perusahaan' },
+  { id: 'P10A', prinsip: 'Prinsip 10: Hutan Tanaman', judul: 'Tidak ada konversi hutan alam ke hutan tanaman', ket: 'Verifikasi melalui citra satelit atau peta tutupan lahan historis' },
+  { id: 'P10B', prinsip: 'Prinsip 10: Hutan Tanaman', judul: 'Chain of Custody (CoC) terdokumentasi penuh', ket: 'Sistem pelacakan dari tunggul hingga produk akhir berjalanV' }
+];
+
+let fscStatus = {};
+
+// ========== INIT ==========
+window.onload = function() {
+  const today = new Date();
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('tanggal-header').textContent = today.toLocaleDateString('id-ID', opts);
+  document.getElementById('laporan-tanggal').textContent = today.toLocaleDateString('id-ID', opts);
+
+  // Set default dates
+  const tglStr = today.toISOString().split('T')[0];
+  ['p-tanggal','pn-tanggal','r-tanggal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = tglStr;
+  });
+
+  // Load FSC from storage
+  const saved = localStorage.getItem('fscMerbauStatus');
+  if (saved) fscStatus = JSON.parse(saved);
+
+  renderFSCChecklist();
+  updateStats();
+  updateFSCProgressDashboard();
+  updateLaporan();
+};
+
+// ========== NAVIGATION ==========
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (id === 'laporan') updateLaporan();
+}
+
+// ========== MODAL ==========
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ========== STATS ==========
+function updateStats() {
+  document.getElementById('stat-total-pohon').textContent = pohonData.length;
+  const vol = panenData.reduce((s, p) => s + parseFloat(p.volume||0), 0);
+  document.getElementById('stat-volume').textContent = vol.toFixed(1) + ' m³';
+  document.getElementById('stat-panen').textContent = panenData.length;
+  const done = Object.values(fscStatus).filter(v => v).length;
+  const pct = Math.round(done / fscKriteria.length * 100);
+  document.getElementById('stat-fsc-pct').textContent = pct + '%';
+  document.getElementById('stat-fsc-sub').textContent = done + ' dari ' + fscKriteria.length + ' kriteria';
+}
+
+// ========== POHON ==========
+function simpanPohon() {
+  const id = document.getElementById('p-id').value.trim();
+  const blok = document.getElementById('p-blok').value.trim();
+  const dbh = parseFloat(document.getElementById('p-dbh').value);
+  const tinggi = parseFloat(document.getElementById('p-tinggi').value) || 0;
+  const status = document.getElementById('p-status').value;
+
+  if (!id || !blok || !dbh) { alert('ID Pohon, Blok, dan DBH wajib diisi!'); return; }
+
+  // Rumus volume kayu: V = π/4 × DBH² × tinggi × ff (faktor bentang 0.7)
+  const vol = ((Math.PI/4) * Math.pow(dbh/100, 2) * tinggi * 0.7).toFixed(2);
+
+  const pohon = {
+    id, blok, dbh, tinggi,
+    volume: parseFloat(vol),
+    lat: document.getElementById('p-lat').value,
+    lon: document.getElementById('p-lon').value,
+    status,
+    tanggal: document.getElementById('p-tanggal').value,
+    catatan: document.getElementById('p-catatan').value
+  };
+
+  pohonData.push(pohon);
+  renderTabelPohon();
+  addLog('Pohon ' + id + ' (DBH ' + dbh + ' cm) ditambahkan ke blok ' + blok);
+  updateStats();
+  updateAlerts();
+  closeModal('modal-pohon');
+  clearForm(['p-id','p-blok','p-dbh','p-tinggi','p-lat','p-lon','p-catatan']);
+}
+
+function renderTabelPohon(data) {
+  const list = data || pohonData;
+  const tbody = document.getElementById('tabel-pohon');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">🌿</div><p>Belum ada data pohon.</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map((p, i) => `
+    <tr>
+      <td><strong>${p.id}</strong></td>
+      <td>${p.blok}</td>
+      <td><strong>${p.dbh}</strong> cm ${p.dbh >= 50 ? '✅' : '⚠️'}</td>
+      <td>${p.tinggi || '—'} m</td>
+      <td>${p.volume || '—'} m³</td>
+      <td style="font-size:11px;">${p.lat && p.lon ? p.lat+', '+p.lon : '—'}</td>
+      <td>${statusBadge(p.status)}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="hapusPohon(${i})">🗑️</button></td>
+    </tr>
+  `).join('');
+}
+
+function hapusPohon(i) {
+  if (confirm('Hapus data pohon ini?')) {
+    pohonData.splice(i, 1);
+    renderTabelPohon();
+    updateStats();
+  }
+}
+
+function filterPohon() {
+  const q = document.getElementById('search-pohon').value.toLowerCase();
+  const s = document.getElementById('filter-status-pohon').value;
+  const filtered = pohonData.filter(p =>
+    (!q || p.id.toLowerCase().includes(q) || p.blok.toLowerCase().includes(q)) &&
+    (!s || p.status === s)
+  );
+  renderTabelPohon(filtered);
+}
+
+// ========== PANEN ==========
+function simpanPanen() {
+  const seri = document.getElementById('pn-seri').value.trim();
+  const volume = parseFloat(document.getElementById('pn-volume').value);
+  if (!seri || !volume) { alert('No. Seri dan Volume wajib diisi!'); return; }
+
+  const panen = {
+    seri, volume,
+    tanggal: document.getElementById('pn-tanggal').value,
+    pohon: document.getElementById('pn-pohon').value,
+    blok: document.getElementById('pn-blok').value,
+    operator: document.getElementById('pn-operator').value,
+    izin: document.getElementById('pn-izin').value,
+    teknik: document.getElementById('pn-teknik').value,
+    catatan: document.getElementById('pn-catatan').value,
+    status: 'terkonfirmasi'
+  };
+
+  panenData.push(panen);
+  renderTabelPanen();
+  addLog('Panen ' + seri + ' tercatat: ' + volume + ' m³ dari pohon ' + panen.pohon);
+
+  // Update status pohon jika ada
+  const pohon = pohonData.find(p => p.id === panen.pohon);
+  if (pohon) pohon.status = 'ditebang';
+  renderTabelPohon();
+  updateStats();
+  closeModal('modal-panen');
+  clearForm(['pn-seri','pn-pohon','pn-blok','pn-operator','pn-izin','pn-catatan']);
+  document.getElementById('pn-volume').value = '';
+}
+
+function renderTabelPanen() {
+  const tbody = document.getElementById('tabel-panen');
+  if (!panenData.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">🪵</div><p>Belum ada catatan panen.</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = panenData.map((p, i) => `
+    <tr>
+      <td><strong>${p.seri}</strong></td>
+      <td>${p.tanggal || '—'}</td>
+      <td>${p.pohon || '—'}</td>
+      <td>${p.blok || '—'}</td>
+      <td><strong>${p.volume}</strong></td>
+      <td>${p.operator || '—'}</td>
+      <td>${p.izin ? '<span class="badge badge-green">'+p.izin+'</span>' : '<span class="badge badge-red">Belum ada</span>'}</td>
+      <td><span class="badge badge-green">Terkonfirmasi</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="hapusPanen(${i})">🗑️</button></td>
+    </tr>
+  `).join('');
+}
+
+function hapusPanen(i) {
+  if (confirm('Hapus catatan panen ini?')) {
+    panenData.splice(i, 1);
+    renderTabelPanen();
+    updateStats();
+  }
+}
+
+// ========== RANTAI PASOK ==========
+function simpanRantai() {
+  const no = document.getElementById('r-no').value.trim();
+  const volume = parseFloat(document.getElementById('r-volume').value);
+  if (!no || !volume) { alert('No. Dokumen dan Volume wajib diisi!'); return; }
+
+  const doc = {
+    no, volume,
+    tanggal: document.getElementById('r-tanggal').value,
+    asal: document.getElementById('r-asal').value,
+    tujuan: document.getElementById('r-tujuan').value,
+    panenRef: document.getElementById('r-panen').value,
+    ket: document.getElementById('r-ket').value,
+    status: 'terverifikasi'
+  };
+
+  rantaiData.push(doc);
+  renderTabelRantai();
+  addLog('Dokumen CoC ' + no + ' ditambahkan: ' + doc.asal + ' → ' + doc.tujuan);
+  closeModal('modal-rantai');
+  clearForm(['r-no','r-asal','r-tujuan','r-panen','r-ket']);
+  document.getElementById('r-volume').value = '';
+}
+
+function renderTabelRantai() {
+  const tbody = document.getElementById('tabel-rantai');
+  if (!rantaiData.length) {
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">🔗</div><p>Belum ada dokumen rantai pasok.</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = rantaiData.map((r, i) => `
+    <tr>
+      <td><strong>${r.no}</strong></td>
+      <td>${r.tanggal || '—'}</td>
+      <td>${r.asal || '—'}</td>
+      <td>${r.tujuan || '—'}</td>
+      <td><strong>${r.volume}</strong> m³</td>
+      <td>${r.panenRef || '—'}</td>
+      <td><span class="badge badge-green">Terverifikasi</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="hapusRantai(${i})">🗑️</button></td>
+    </tr>
+  `).join('');
+}
+
+function hapusRantai(i) {
+  if (confirm('Hapus dokumen ini?')) {
+    rantaiData.splice(i, 1);
+    renderTabelRantai();
+  }
+}
+
+// ========== FSC CHECKLIST ==========
+function renderFSCChecklist() {
+  let currentPrinsip = '';
+  let html = '';
+  fscKriteria.forEach(k => {
+    if (k.prinsip !== currentPrinsip) {
+      if (currentPrinsip) html += '</div>';
+      currentPrinsip = k.prinsip;
+      html += `<div style="margin-bottom:0.5rem;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--forest-mid);padding:12px 0 4px;border-top:2px solid var(--cream-dark);margin-top:8px;">${k.prinsip}</div>`;
+    }
+    const checked = fscStatus[k.id] || false;
+    html += `<div class="checklist-item">
+      <div class="check-box ${checked ? 'checked' : ''}" onclick="toggleFSC('${k.id}')" title="Tandai sebagai terpenuhi">
+        ${checked ? '✓' : ''}
+      </div>
+      <div style="flex:1;">
+        <div class="check-title" style="${checked ? 'text-decoration:line-through;color:var(--text-muted)' : ''}">${k.judul}</div>
+        <div class="check-desc">${k.ket}</div>
+      </div>
+      <span class="check-category">${k.id}</span>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('fsc-checklist-container').innerHTML = html;
+  updateFSCStats();
+  updateFSCProgressDashboard();
+}
+
+function toggleFSC(id) {
+  fscStatus[id] = !fscStatus[id];
+  localStorage.setItem('fscMerbauStatus', JSON.stringify(fscStatus));
+  renderFSCChecklist();
+  updateStats();
+}
+
+function resetChecklist() {
+  if (confirm('Reset semua centang? Progress akan hilang.')) {
+    fscStatus = {};
+    localStorage.removeItem('fscMerbauStatus');
+    renderFSCChecklist();
+    updateStats();
+  }
+}
+
+function updateFSCStats() {
+  const done = Object.values(fscStatus).filter(v => v).length;
+  const total = fscKriteria.length;
+  document.getElementById('chk-selesai').textContent = done;
+  document.getElementById('chk-proses').textContent = total - done;
+  document.getElementById('chk-pct').textContent = Math.round(done/total*100) + '%';
+}
+
+function updateFSCProgressDashboard() {
+  const done = Object.values(fscStatus).filter(v => v).length;
+  const total = fscKriteria.length;
+  const pct = Math.round(done/total*100);
+  const color = pct >= 80 ? 'var(--forest-light)' : pct >= 50 ? 'var(--gold)' : '#dc3545';
+  const label = pct >= 80 ? '🟢 Siap Audit' : pct >= 50 ? '🟡 Dalam Proses' : '🔴 Perlu Perhatian';
+
+  document.getElementById('fsc-progress-list').innerHTML = `
+    <div style="margin-bottom:1rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:600;">Kemajuan Keseluruhan</span>
+        <span style="font-size:13px;font-weight:700;color:${color};">${done}/${total} kriteria</span>
+      </div>
+      <div class="progress-bar" style="height:12px;">
+        <div class="progress-fill" style="width:${pct}%;background:${color};height:12px;"></div>
+      </div>
+      <div style="text-align:right;margin-top:4px;font-size:12px;color:var(--text-muted);">${label}</div>
+    </div>
+    ${[...new Set(fscKriteria.map(k => k.prinsip))].map(prinsip => {
+      const ks = fscKriteria.filter(k => k.prinsip === prinsip);
+      const d = ks.filter(k => fscStatus[k.id]).length;
+      const p = Math.round(d/ks.length*100);
+      return `<div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;">
+          <span style="color:var(--text-muted);">${prinsip.split(':')[1].trim()}</span>
+          <span style="font-weight:600;">${d}/${ks.length}</span>
+        </div>
+        <div class="progress-bar" style="height:6px;">
+          <div class="progress-fill ${p===100?'':'gold'}" style="width:${p}%;height:6px;${p===100?'background:var(--forest-light)':''}"></div>
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+// ========== ALERTS ==========
+function updateAlerts() {
+  const alerts = [];
+  const pohonTidakLayak = pohonData.filter(p => p.dbh < 50 && p.status === 'layak');
+  if (pohonTidakLayak.length > 0) {
+    alerts.push({ type: 'alert-warning', icon: '⚠️', msg: pohonTidakLayak.length + ' pohon ditandai "Layak Tebang" namun DBH < 50 cm. Tidak memenuhi standar FSC!' });
+  }
+  const panenTanpaIzin = panenData.filter(p => !p.izin);
+  if (panenTanpaIzin.length > 0) {
+    alerts.push({ type: 'alert-warning', icon: '⚠️', msg: panenTanpaIzin.length + ' catatan panen tidak memiliki nomor izin tebang.' });
+  }
+  if (pohonData.length === 0) {
+    alerts.push({ type: 'alert-info', icon: 'ℹ️', msg: 'Mulai dengan menambahkan data pohon di menu Data Pohon.' });
+  }
+  if (pohonData.length > 0 && panenData.length === 0) {
+    alerts.push({ type: 'alert-success', icon: '✅', msg: pohonData.length + ' pohon tercatat. Lanjutkan ke menu Panen & Produksi untuk mencatat kegiatan penebangan.' });
+  }
+  const alertArea = document.getElementById('alert-area');
+  if (alerts.length === 0) {
+    alertArea.innerHTML = '<div class="alert alert-success"><span class="alert-icon">✅</span><div>Semua data terlihat baik. Tidak ada peringatan aktif.</div></div>';
+  } else {
+    alertArea.innerHTML = alerts.map(a => `<div class="alert ${a.type}"><span class="alert-icon">${a.icon}</span><div>${a.msg}</div></div>`).join('');
+  }
+}
+
+// ========== TIMELINE LOG ==========
+function addLog(msg) {
+  const now = new Date();
+  const time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+  const container = document.getElementById('timeline-log');
+  const item = document.createElement('div');
+  item.className = 'timeline-item';
+  item.innerHTML = `<div class="timeline-dot done">✓</div><div class="timeline-date">${time}</div><div class="timeline-title">${msg}</div>`;
+  container.insertBefore(item, container.firstChild);
+  // Limit to 8 entries
+  while (container.children.length > 8) container.removeChild(container.lastChild);
+}
+
+// ========== LAPORAN ==========
+function updateLaporan() {
+  const today = new Date();
+  document.getElementById('laporan-tanggal').textContent = today.toLocaleDateString('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  // Produksi
+  const vol = panenData.reduce((s, p) => s + parseFloat(p.volume||0), 0);
+  document.getElementById('laporan-produksi').innerHTML = panenData.length === 0
+    ? '<p style="color:var(--text-muted);font-size:14px;">Belum ada data produksi.</p>'
+    : `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="background:var(--cream-dark);border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:4px;">Total Volume</div>
+        <div style="font-size:24px;font-weight:700;">${vol.toFixed(2)} m³</div>
+      </div>
+      <div style="background:var(--cream-dark);border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:4px;">Catatan Panen</div>
+        <div style="font-size:24px;font-weight:700;">${panenData.length}</div>
+      </div>
+    </div>
+    <div style="margin-top:1rem;">
+      ${panenData.map(p => `<div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--cream-dark);">
+        <span>${p.seri}</span><span>${p.tanggal||'—'}</span><span><strong>${p.volume} m³</strong></span>
+      </div>`).join('')}
+    </div>`;
+
+  // Inventaris
+  const statCount = { layak:0, pemantauan:0, perlindungan:0, ditebang:0 };
+  pohonData.forEach(p => { statCount[p.status] = (statCount[p.status]||0)+1; });
+  document.getElementById('laporan-inventaris').innerHTML = pohonData.length === 0
+    ? '<p style="color:var(--text-muted);font-size:14px;">Belum ada data inventaris.</p>'
+    : `<div style="font-size:13px;">
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--cream-dark);"><span>Total pohon tercatat</span><strong>${pohonData.length}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--cream-dark);"><span>Layak tebang (DBH ≥ 50)</span><strong>${statCount.layak||0}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--cream-dark);"><span>Pemantauan</span><strong>${statCount.pemantauan||0}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--cream-dark);"><span>Kawasan perlindungan</span><strong>${statCount.perlindungan||0}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;"><span>Sudah ditebang</span><strong>${statCount.ditebang||0}</strong></div>
+    </div>`;
+
+  // FSC bar
+  const done = Object.values(fscStatus).filter(v => v).length;
+  const total = fscKriteria.length;
+  const pct = Math.round(done/total*100);
+  document.getElementById('fsc-bar-laporan').innerHTML = `
+    <div style="text-align:center;margin-bottom:1rem;">
+      <div style="font-size:42px;font-weight:700;color:${pct>=80?'var(--forest-mid)':pct>=50?'var(--gold)':'#dc3545'};">${pct}%</div>
+      <div style="font-size:13px;color:var(--text-muted);">${done} dari ${total} kriteria terpenuhi</div>
+    </div>
+    <div class="progress-bar" style="height:14px;border-radius:7px;">
+      <div class="progress-fill" style="width:${pct}%;height:14px;border-radius:7px;background:${pct>=80?'var(--forest-light)':pct>=50?'var(--gold)':'#dc3545'};"></div>
+    </div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-muted);text-align:center;">
+      ${pct>=80?'✅ Siap untuk audit FSC':pct>=50?'⏳ Dalam proses sertifikasi':'❌ Perlu tindakan segera'}
+    </div>
+  `;
+}
+
+function simpanCatatan() {
+  const val = document.getElementById('catatan-audit').value;
+  if (!val.trim()) return;
+  localStorage.setItem('fscCatatanAudit', val);
+  alert('Catatan audit tersimpan.');
+}
+
+// Load catatan if exist
+const savedCatatan = localStorage.getItem('fscCatatanAudit');
+if (savedCatatan) setTimeout(() => { document.getElementById('catatan-audit').value = savedCatatan; }, 100);
+
+// ========== HELPERS ==========
+function statusBadge(s) {
+  const map = {
+    layak: '<span class="badge badge-green">Layak Tebang</span>',
+    perlindungan: '<span class="badge badge-blue">Perlindungan</span>',
+    pemantauan: '<span class="badge badge-gold">Pemantauan</span>',
+    ditebang: '<span class="badge badge-gray">Ditebang</span>'
+  };
+  return map[s] || s;
+}
+
+function clearForm(ids) {
+  ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
